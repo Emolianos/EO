@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partie Polityczne w Systemie Demokratycznym</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --accent-blue: #38bdf8;
+      --accent-purple: #818cf8;
+      --accent-yellow: #f59e0b;
+      --yellow-bg: rgba(245, 158, 11, 0.12);
+      --yellow-border: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #020617;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-block-size: 100vh;
+      padding: 20px;
+    }
+
+    .presentation-container {
+      inline-size: 100%;
+      max-inline-size: 960px;
+      block-size: 600px;
+      background: var(--bg-primary);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      padding: 40px;
+      block-size: 100%;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.4s ease-in-out;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-header {
+      border-block-end: 2px solid rgba(255,255,255,0.08);
+      padding-block-end: 12px;
+      margin-block-end: 20px;
+    }
+
+    .slide-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .slide-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-block-start: 4px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .title-slide {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+    }
+
+    .title-slide h1 {
+      font-size: 2.6rem;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-block-end: 15px;
+      line-height: 1.2;
+    }
+
+    .title-slide h2 {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-block-end: 30px;
+    }
+
+    .authors-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 15px 30px;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .authors-box .role {
+      font-size: 0.8rem;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-block-end: 5px;
+    }
+
+    .authors-box .names {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .authors-box .context {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-block-start: 5px;
+    }
+
+    p, li {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    ul {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    ul li {
+      position: relative;
+      padding-inline-start: 24px;
+    }
+
+    ul li::before {
+      content: "•";
+      color: var(--accent-blue);
+      font-size: 1.5rem;
+      position: absolute;
+      inset-inline-start: 0;
+      inset-block-start: -4px;
+    }
+
+    .extra-box {
+      background-color: var(--yellow-bg);
+      border-inline-start: 4px solid var(--yellow-border);
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin-block-start: auto;
+    }
+
+    .extra-box-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-yellow);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-block-end: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .extra-box-text {
+      font-size: 0.88rem;
+      color: #fef08a;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .card h4 {
+      color: var(--accent-blue);
+      margin-block-end: 6px;
+      font-size: 0.95rem;
+    }
+
+    .card p {
+      font-size: 0.85rem;
+    }
+
+    table {
+      inline-size: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 8px 12px;
+      text-align: start;
+      border-block-end: 1px solid rgba(255,255,255,0.1);
+    }
+
+    th {
+      background-color: rgba(255,255,255,0.05);
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+
+    td strong {
+      color: var(--accent-purple);
+    }
+
+    .quiz-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-item {
+      background: var(--bg-card);
+      padding: 8px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .quiz-num {
+      background: var(--accent-purple);
+      color: #fff;
+      font-weight: bold;
+      inline-size: 24px;
+      block-size: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-text {
+      font-size: 0.88rem;
+      color: #f1f5f9;
+    }
+
+    .controls {
+      block-size: 60px;
+      background: rgba(15, 23, 42, 0.9);
+      border-block-start: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+    }
+
+    .nav-btn {
+      background: var(--accent-purple);
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: #6366f1;
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="presentation-container">
+    
+    <!-- SLAJD 1: TYTUŁOWY -->
+    <div class="slide title-slide active">
+      <h1>Partie Polityczne<br>w Systemie Demokratycznym</h1>
+      <h2>Istota, funkcje, podziały ideologiczne oraz polska scena polityczna</h2>
+      
+      <div class="authors-box">
+        <div class="role">Autorzy Prezentacji</div>
+        <div class="names">Emilian Waluszko & Oleksandra Kozyreva</div>
+        <div class="context">Edukacja Obywatelska</div>
+      </div>
+    </div>
+
+    <!-- SLAJD 2 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">1. Czym jest partia polityczna?</div>
+        <div class="slide-subtitle">Definicja, program oraz rola w państwie prawa</div>
+      </div>
+      <div class="slide-body">
+        <ul>
+          <li><strong>Definicja:</strong> Dobrowolna organizacja łącząca obywateli o wspólnych poglądach, której celem jest zdobycie i sprawowanie władzy państwowej lub wywieranie na nią wpływu w drodze wyborów.</li>
+          <li><strong>Program polityczny:</strong> Oficjalny dokument określający cele ugrupowania, diagnozę problemów społecznych oraz proponowane reformy. Stanowi obietnicę złożoną wyborcom.</li>
+          <li><strong>Pluralizm polityczny:</strong> Zasada gwarantująca wolność tworzenia i działania wielu różnych partii politycznych. Daje obywatelom wybór i zapobiega dyktaturze.</li>
+        </ul>
+
+        <div class="extra-box">
+          <div class="extra-box-title">💡 Wiedza poza-podręcznikowa</div>
+          <div class="extra-box-text">Najstarszą nieprzerwanie działającą partią polityczną na świecie jest amerykańska <strong>Partia Demokratyczna</strong> (utworzona w 1828 r.) lub brytyjska <strong>Partia Konserwatywna</strong>, której korzenie sięgają XVII-wiecznych "Torysów"!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 3 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">2. Kluczowe funkcje partii politycznych</div>
+        <div class="slide-subtitle">Jakie zadania w państwie realizują partie?</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h4>1. Funkcja rządzenia</h4>
+            <p>Formowanie rządu po wygranych wyborach, obsadzanie stanowisk i realne kierowanie polityką państwa.</p>
+          </div>
+          <div class="card">
+            <h4>2. Funkcja wyborcza</h4>
+            <p>Szkolenie i rekrutacja kandydatów, układanie list wyborczych oraz organizowanie kampanii.</p>
+          </div>
+          <div class="card">
+            <h4>3. Funkcja artykulacyjna</h4>
+            <p>Gromadzenie, porządkowanie i głośne reprezentowanie interesów konkretnych grup społecznych.</p>
+          </div>
+          <div class="card">
+            <h4>4. Funkcja opiniotwórcza</h4>
+            <p>Kształtowanie poglądów obywateli poprzez debaty publiczne, media i agitację.</p>
+          </div>
+          <div class="card">
+            <h4>5. Funkcja kontrolna</h4>
+            <p>Sprawowana głównie przez opozycję – stałe patrzenie władzy na ręce i wytykanie jej błędów.</p>
+          </div>
+          <div class="card">
+            <h4>6. Funkcja kreacyjna</h4>
+            <p>Odkrywanie talentów, przygotowywanie przyszłych premierów, ministrów i ekspertów.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 4 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">3. Systemy partyjne na świecie</div>
+        <div class="slide-subtitle">Różne modele rywalizacji o władzę</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h4>Jednopartyjny</h4>
+            <p>Monopol jednej partii (np. Chiny, Korea Płn.). Legalna opozycja nie istnieje. Domena reżimów niedemokratycznych.</p>
+          </div>
+          <div class="card">
+            <h4>Dwupartyjny</h4>
+            <p>Na scenie dominują dwie potężne siły na przemian zdobywające władzę (np. USA: Demokraci vs Republikanie).</p>
+          </div>
+          <div class="card">
+            <h4>Wielupartyjny</h4>
+            <p>O mandaty rywalizuje wiele ugrupowań (np. Polska, Niemcy). Władzę najczęściej sprawuje koalicja partii.</p>
+          </div>
+        </div>
+
+        <div class="extra-box">
+          <div class="extra-box-title">💡 Wiedza poza-podręcznikowa</div>
+          <div class="extra-box-text">Dlaczego w USA są tylko 2 partie? Wynika to z tzw. <strong>Prawa Duvergera</strong>: ordynacja wyborcza oparta na jednoosobowych okręgach wyborczych ("zwycięzca bierze wszystko") naturalnie eliminuje małe partie i utrudnia im wejście do Kongresu.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 5 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">4. Podział: Lewica vs Prawica</div>
+        <div class="slide-subtitle">Tradycyjny podział ideologiczny</div>
+      </div>
+      <div class="slide-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Obszar</th>
+              <th>Poglądy Lewicowe</th>
+              <th>Poglądy Prawicowe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Gospodarka</strong></td>
+              <td>Interwencjonizm państwowy, rozbudowane świadczenia, progresja podatkowa.</td>
+              <td>Wolny rynek, swoboda działalności, niższe i prostsze podatki.</td>
+            </tr>
+            <tr>
+              <td><strong>Światopogląd</strong></td>
+              <td>Laicyzacja państwa, postęp, liberalizacja praw społecznych.</td>
+              <td>Tradycja, przywiązanie do religii, ochrona rodziny.</td>
+            </tr>
+            <tr>
+              <td><strong>Społeczeństwo</strong></td>
+              <td>Dążenie do równości (egalitaryzm), ochrona mniejszości.</td>
+              <td>Nacisk na naród, patriotyzm, indywidualna odpowiedzialność.</td>
+            </tr>
+            <tr>
+              <td><strong>Integracja z UE</strong></td>
+              <td>Poparcie dla pogłębiania integracji i mocnych instytucji unijnych.</td>
+              <td>Ochrona suwerenności państw narodowych ("Europa Ojczyzn").</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="extra-box">
+          <div class="extra-box-title">💡 Wiedza poza-podręcznikowa</div>
+          <div class="extra-box-text">Skąd ten podział? Nazwy pochodzą z czasów <strong>Rewolucji Francuskiej (1789 r.)</strong>. W Zgromadzeniu Narodowym zwolennicy zmian i rewolucji siadali po lewej stronie przewodniczącego, a obrońcy monarchii i tradycji – po prawej.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 6 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">5. Dwie osie podziału sceny politycznej</div>
+        <div class="slide-subtitle">Dlaczego klasyczna lewica/prawica to za mało?</div>
+      </div>
+      <div class="slide-body">
+        <ul>
+          <li><strong>Podział jednowymiarowy bywa mylący:</strong> Współczesne partie rzadko pasują do czarno-białej szufladki lewica/prawica.</li>
+          <li><strong>Oś Gospodarcza (Ekonomiczna):</strong> Od skrajnego interwencjonizmu (etatyzmu) i socjalizmu po skrajny wolny rynek.</li>
+          <li><strong>Oś Światopoglądowa (Obyczajowa):</strong> Od konserwatyzmu i tradycjonalizmu po liberalizm obyczajowy i progresywizm.</li>
+          <li><strong>Partie Centrowe:</strong> Starają się łączyć elementy obu stron, szukając kompromisów społeczno-gospodarczych.</li>
+        </ul>
+        
+        <div class="card" style="margin-block-start: 10px; background: rgba(56, 189, 248, 0.05); border-color: var(--accent-blue);">
+          <p style="font-size: 0.88rem;">📌 <strong>Przykład:</strong> Partia może być bardzo konserwatywna obyczajowo (tradycyjna), ale jednocześnie lewicowa gospodarczo (wprowadzać wysokie transfery socjalne i podnosić podatki).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 7 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">6. Ramy prawne działania partii w Polsce</div>
+        <div class="slide-subtitle">Konstytucja RP oraz wymogi formalne</div>
+      </div>
+      <div class="slide-body">
+        <ul>
+          <li><strong>Podstawa prawna:</strong> Art. 11 i 13 Konstytucji RP oraz Ustawa o partiach politycznych. Art. 11 wprost gwarantuje wolność tworzenia i działania partii (pluralizm).</li>
+          <li><strong>Zakazy konstytucyjne:</strong> Zakazane są partie odwołujące się do nazizmu, faszyzmu i komunizmu oraz stosujące przemoc lub rasizm.</li>
+          <li><strong>Jawność finansowania:</strong> Struktury i finanse partii muszą być jawne – utajnianie działalności jest nielegalne.</li>
+          <li><strong>Organ rejestrujący:</strong> Nową partię wpisuje do ewidencji <strong>Sąd Okręgowy w Warszawie</strong>.</li>
+        </ul>
+
+        <div class="extra-box">
+          <div class="extra-box-title">💡 Wiedza poza-podręcznikowa</div>
+          <div class="extra-box-text">Aby zarejestrować partię w Polsce, należy zebrać co najmniej <strong>1000 podpisów</strong> obywateli. Choć w Sądzie zarejestrowanych jest blisko 100 partii, do Sejmu dostaje się zaledwie kilka z nich!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 8 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">7. Polska scena parlamentarna (X kadencja)</div>
+        <div class="slide-subtitle">Główne siły polityczne w polskim Sejmie</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <h4>Partie w Sejmie X kadencji</h4>
+            <p style="font-size: 0.82rem; line-height: 1.5;">
+              • <strong>Prawo i Sprawiedliwość:</strong> Prawica, konserwatyzm, programy socjalne.<br>
+              • <strong>Koalicja Obywatelska:</strong> Centrum / liberalizm, proeuropejskość.<br>
+              • <strong>Polska 2050 / PSL:</strong> Centrum, agraryzm, ekologia.<br>
+              • <strong>Nowa Lewica / Razem:</strong> Socjaldemokracja, progresywizm.<br>
+              • <strong>Konfederacja:</strong> Prawica, konserwatyzm, wolny rynek.
+            </p>
+          </div>
+          <div class="card">
+            <h4>Rządzący vs Opozycja</h4>
+            <p style="font-size: 0.82rem; margin-block-end: 8px;"><strong>Koalicja rządząca:</strong> Tworzy większość w Sejmie i wyznacza skład Rady Ministrów.</p>
+            <p style="font-size: 0.82rem;"><strong>Opozycja parlamentarna:</strong> Kontroluje działania rządu i proponuje alternatywne ustawy.</p>
+          </div>
+        </div>
+
+        <div class="extra-box">
+          <div class="extra-box-title">💡 Wiedza poza-podręcznikowa</div>
+          <div class="extra-box-text"><strong>Czym są subwencje?</strong> Partie otrzymują finansowanie z budżetu państwa, jeśli zdobędą min. <strong>3% głosów</strong> (lub 6% jako koalicja). Ma to zapobiegać korupcji i kupowaniu partii przez bogatych biznesmenów.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLAJD 9 -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">8. Jak analizować programy partii?</div>
+        <div class="slide-subtitle">Poradnik świadomego obywatela</div>
+      </div>
+      <div class="slide-body">
+        <ul>
+          <li><strong>Sprawdzaj koszty:</strong> Pytaj nie tylko "co partia obiecuje?", ale "skąd weźmie na to pieniądze?".</li>
+          <li><strong>Weryfikuj obietnice z głosowaniami:</strong> Słowa polityków w mediach często różnią się od tego, jak głosują w Sejmie.</li>
+          <li><strong>Uważaj na populizm:</strong> Wykrywaj proste, nierealne recepty na bardzo skomplikowane problemy społeczne i gospodarcze.</li>
+          <li><strong>Korzystaj z niezależnych narzędzi:</strong> Przed wyborami warto wypełnić np. <em>Latarnik Wyborczy</em>, który porównuje Twoje poglądy z oficjalnymi deklaracjami komitetów.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SLAJD 10: QUIZ -->
+    <div class="slide">
+      <div class="slide-header">
+        <div class="slide-title">9. Szybki Quiz Wiedzy! 🧠</div>
+        <div class="slide-subtitle">Sprawdźmy, ile udało się zapamiętać z dzisiejszej lekcji</div>
+      </div>
+      <div class="slide-body">
+        <div class="quiz-list">
+          <div class="quiz-item">
+            <div class="quiz-num">1</div>
+            <div class="quiz-text">Jak nazywa się zasada gwarantująca swobodę działania wielu partii?</div>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-num">2</div>
+            <div class="quiz-text">Która funkcja partii polega na wytykaniu błędów rządzącym przez opozycję?</div>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-num">3</div>
+            <div class="quiz-text">Ile podpisów obywateli potrzeba do zarejestrowania nowej partii w Polsce?</div>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-num">4</div>
+            <div class="quiz-text">Z jakiego wydarzenia pochodzi podział na Lewicę i Prawicę?</div>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-num">5</div>
+            <div class="quiz-text">Jaki próg % daje partii finansowanie (subwencję) z budżetu?</div>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-num">6</div>
+            <div class="quiz-text">Jaki system partyjny (jedno-, dwu- czy wielupartyjny) panuje w USA?</div>
+          </div>
+          <div class="quiz-item">
+            <div class="quiz-num">7</div>
+            <div class="quiz-text">W jakim mieście znajduje się Sąd Okręgowy prowadzący ewidencję partii?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+      <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Poprzedni</button>
+      <div class="slide-counter" id="counter">Slajd 1 z 10</div>
+      <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Następny →</button>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('counter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+      });
+      counter.textContent = `Slajd ${currentSlide + 1} z ${slides.length}`;
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    function changeSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide < 0) currentSlide = 0;
+      if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+      updateSlide();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        if (currentSlide < slides.length - 1) changeSlide(1);
+      } else if (e.key === 'ArrowLeft') {
+        if (currentSlide > 0) changeSlide(-1);
+      }
+    });
+
+    updateSlide();
+  </script>
+</body>
+</html>
